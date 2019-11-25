@@ -14,6 +14,7 @@ struct node {
 	struct node *right;
 };
 
+struct node *build(const unsigned *l, int sz, struct node *parent);
 void node_print(const struct node *n);
 
 #endif /* _NODE_H */

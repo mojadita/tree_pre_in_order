@@ -85,11 +85,13 @@ int main(int argc, char **argv)
 	char *sep = "";
 	int col = 0;
 
-	for (i = 0; i < N-1; i++) {
+	for (i = 0; i < N; i++) {
 		int j = i + random() % (N - i);
-		int z = array[i];
-		array[i] = array[j];
-		array[j] = z;
+		if (i != j) {
+			int z = array[i];
+			array[i] = array[j];
+			array[j] = z;
+		}
 		col += printf("%s", sep);
 		if (col >= 70) {
 			col = 0;
@@ -98,6 +100,7 @@ int main(int argc, char **argv)
 		col += printf("%u", array[i]);
 		sep = " ";
 	}
+
 	if (col)
 		printf("\n");
 	exit(EXIT_SUCCESS);

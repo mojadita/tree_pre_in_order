@@ -11,7 +11,7 @@ all: $(targets)
 clean:
 	$(RM) $(toclean)
 
-bt_objs = bt.o prtree.o
+bt_objs = bt.o build.o prtree.o
 toclean += $(bt_objs)
 bt: $(bt_objs)
 	$(CC) -o $@ $(bt_objs)

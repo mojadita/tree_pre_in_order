@@ -17,29 +17,29 @@
 int prob = 5000,
 	id = 0;
 
-struct node *build_random(struct node *parent)
-{
-	if (prob < random() % 10000) return NULL;
-
-	struct node *res = malloc(sizeof *res);
-	assert(res != NULL);
-
-	res->id		= id++;
-	res->parent = parent;
-	res->left	= build_random(res);
-	res->right	= build_random(res);
-
-	return res;
-}
-
 char *sep;
 
-void print_preorder(struct node *n)
+
+void print(struct node *n, unsigned *unused)
+{
+	printf("%s%u", sep, n->id);
+	sep = ", ";
+}
+
+void renumber(struct node *n, unsigned *id)
+{
+	n->id = (*id)++;
+}
+
+void print_preorder(
+	struct node *n,
+	void (*f)(struct node *n, unsigned *p),
+	unsigned *p)
 {
 	if (!n) return;
-	printf("%s%d", sep, n->id); sep = ", ";
-	print_preorder(n->left);
-	print_preorder(n->right);
+	f(n, p);
+	print_preorder(n->left, f, p);
+	print_preorder(n->right, f, p);
 }
 
 void print_inorder(struct node *n)
@@ -50,13 +50,43 @@ void print_inorder(struct node *n)
 	print_inorder(n->right);
 }
 
+unsigned *tree;
+int tree_n;
+int tree_cap;
+
+void add_to_tree(unsigned v)
+{
+	if (!tree) {
+		tree_cap = 10;
+		tree = malloc(10 * sizeof *tree);
+		assert(tree != NULL);
+	}
+	if (tree_n == tree_cap) { /* grow */
+		tree_cap <<= 1;
+		tree = realloc(tree, tree_cap * sizeof *tree);
+		assert(tree != NULL);
+	}
+	tree[tree_n++] = v;
+}
+
+
 int main(int argc, char **argv)
 {
-	srandomdev();
+	unsigned v;
+	while (scanf("%u", &v) == 1)
+		add_to_tree(v);
 
-	struct node *root = build_random(NULL);
-	sep = "preorder: "; print_preorder(root); puts("");
+	struct node *root = build(tree, tree_n, NULL);
+	sep = "preorder: "; print_preorder(root, print, NULL); puts("");
 	sep = "inorder: "; print_inorder(root); puts("");
-	printf("Tree:\n");
 	node_print(root);
+
+	unsigned id = 0;
+	print_preorder(root, renumber, &id);
+
+	sep = "preorder2: "; print_preorder(root, print, NULL); puts("");
+	sep = "inorder: "; print_inorder(root); puts("");
+	node_print(root);
+
 }
+
