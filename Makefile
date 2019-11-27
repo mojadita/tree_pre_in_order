@@ -4,6 +4,7 @@
 #
 
 RM ?= rm -f
+
 targets = bt rnd
 toclean = $(targets)
 
