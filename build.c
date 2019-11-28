@@ -7,7 +7,12 @@
  */
 
 #include <assert.h>
+#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define F(_fmt) __FILE__":%d: " _fmt, __LINE__
 
 #include "node.h"
 
@@ -16,7 +21,12 @@ struct node *build(const unsigned *l, int sz, struct node *parent)
     if (sz == 0) return NULL;
 
     struct node *res = malloc(sizeof *res);
-    assert(res != NULL);
+	if (res == NULL) {
+		fprintf(stderr,
+			F("malloc: %s (errno = %d)\n"),
+			strerror(errno), errno);
+		exit(EXIT_FAILURE);
+	}
 
     int i, im = -1;
     unsigned m = ~0;
