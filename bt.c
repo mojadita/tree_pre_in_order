@@ -6,7 +6,6 @@
  * License: BSD
  */
 
-#include <assert.h>
 #include <errno.h>
 #include <getopt.h>
 #include <stdio.h>
@@ -66,12 +65,22 @@ void add_to_tree(unsigned v)
     if (!tree) {
         tree_cap = 10;
         tree = malloc(10 * sizeof *tree);
-        assert(tree != NULL);
+        if (tree != NULL) {
+            fprintf(stderr,
+                F("malloc: %s (errno = %d)\n"),
+                strerror(errno), errno);
+            exit(EXIT_FAILURE);
+        }
     }
     if (tree_n == tree_cap) { /* grow */
         tree_cap <<= 1;
         tree = realloc(tree, tree_cap * sizeof *tree);
-        assert(tree != NULL);
+        if (tree != NULL) {
+            fprintf(stderr,
+                F("malloc: %s (errno = %d)\n"),
+                strerror(errno), errno);
+            exit(EXIT_FAILURE);
+        }
     }
     tree[tree_n++] = v;
 }
