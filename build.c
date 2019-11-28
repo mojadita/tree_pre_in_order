@@ -21,12 +21,12 @@ struct node *build(const unsigned *l, int sz, struct node *parent)
     if (sz == 0) return NULL;
 
     struct node *res = malloc(sizeof *res);
-	if (res == NULL) {
-		fprintf(stderr,
-			F("malloc: %s (errno = %d)\n"),
-			strerror(errno), errno);
-		exit(EXIT_FAILURE);
-	}
+    if (res == NULL) {
+        fprintf(stderr,
+            F("malloc: %s (errno = %d)\n"),
+            strerror(errno), errno);
+        exit(EXIT_FAILURE);
+    }
 
     int i, im = -1;
     unsigned m = ~0;
