@@ -13,25 +13,25 @@
 
 struct node *build(const unsigned *l, int sz, struct node *parent)
 {
-	if (sz == 0) return NULL;
+    if (sz == 0) return NULL;
 
-	struct node *res = malloc(sizeof *res);
-	assert(res != NULL);
+    struct node *res = malloc(sizeof *res);
+    assert(res != NULL);
 
-	int i, im = -1;
-	unsigned m = ~0;
-	for (i = 0; i < sz; i++) {
-		const unsigned c = l[i];
-		if (c < m) {
-			m = c;
-			im = i;
-		}
-	}
-	assert (im >= 0 && im < sz);
+    int i, im = -1;
+    unsigned m = ~0;
+    for (i = 0; i < sz; i++) {
+        const unsigned c = l[i];
+        if (c < m) {
+            m = c;
+            im = i;
+        }
+    }
+    assert (im >= 0 && im < sz);
 
-	res->id = m;
-	res->parent = parent;
-	res->left = build(l, im, res);
-	res->right = build(l + im + 1, sz - im - 1, res);
-	return res;
+    res->id = m;
+    res->parent = parent;
+    res->left = build(l, im, res);
+    res->right = build(l + im + 1, sz - im - 1, res);
+    return res;
 }
